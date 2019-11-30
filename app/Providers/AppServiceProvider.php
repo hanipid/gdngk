@@ -35,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
                 // 'topnav' => true,
                 'icon' => 'avatar'
             ]);
-            $event->menu->add(...$this->prepareMenu(menu('frontend', '_json'))->toArray());
+            $event->menu->add(...collect($this->prepareMenu(menu('frontend', '_json'))->toArray()));
         });
 
         Blade::directive('rupiah', function ($amount) {
