@@ -14,8 +14,9 @@ class CommodityGradeController extends Controller
      */
     static function index($commodityId)
     {
-        // $grades[] = (object) ['id' => 1, 'commodity_id' => 1, 'name' => 'Kelas A', 'price' => 60000];
-        // $grades[] = (object) ['id' => 2, 'commodity_id' => 1, 'name' => 'Kelas B', 'price' => 55000];
+        if (auth()->user()->hasPermission('browse_commodity_grades') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
         $commodityGrades = CommodityGrade::where('commodity_id', $commodityId)->get();
 
         return $commodityGrades;
@@ -28,6 +29,9 @@ class CommodityGradeController extends Controller
      */
     public function create($commodityId)
     {
+        if (auth()->user()->hasPermission('add_commodity_grades') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
         return view('commodity.grade.create', compact('commodityId'));
     }
 
@@ -39,6 +43,9 @@ class CommodityGradeController extends Controller
      */
     public function store(Request $request, $commodityId)
     {
+        if (auth()->user()->hasPermission('add_commodity_grades') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
         $request->validate([
             'name' => 'required',
             'price' => 'required'
@@ -64,7 +71,9 @@ class CommodityGradeController extends Controller
      */
     public function show($id)
     {
-        //
+        if (auth()->user()->hasPermission('read_commodity_grades') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
     }
 
     /**
@@ -75,6 +84,9 @@ class CommodityGradeController extends Controller
      */
     public function edit($id, $commodityId)
     {
+        if (auth()->user()->hasPermission('edit_commodity_grades') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
         $commodityGrade = CommodityGrade::find($id);
         return view('commodity.grade.edit', compact('commodityGrade', 'commodityId'));
     }
@@ -88,6 +100,9 @@ class CommodityGradeController extends Controller
      */
     public function update(Request $request, $id, $commodityId)
     {
+        if (auth()->user()->hasPermission('edit_commodity_grades') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
         $request->validate([
             'name' => 'required',
             'price' => 'required'
@@ -114,6 +129,9 @@ class CommodityGradeController extends Controller
      */
     public function destroy($id, $commodityId)
     {
+        if (auth()->user()->hasPermission('delete_commodity_grades') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
         CommodityGrade::find($id)->delete();
         return redirect('/commodities/' . $commodityId);
     }

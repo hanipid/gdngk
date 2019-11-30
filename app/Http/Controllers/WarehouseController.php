@@ -17,6 +17,9 @@ class WarehouseController extends Controller
      */
     public function index()
     {
+        if (auth()->user()->hasPermission('browse_warehouses') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
         $warehouses = Warehouse::all();
         // dd($warehouses);
         return view('warehouse.index', compact('warehouses'));
@@ -29,6 +32,9 @@ class WarehouseController extends Controller
      */
     public function create()
     {
+        if (auth()->user()->hasPermission('add_warehouses') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
         $users = User::where('role_id', 6)->get();
         $commodities = Commodity::all();
         return view('warehouse.create', compact('users', 'commodities'));
@@ -42,6 +48,9 @@ class WarehouseController extends Controller
      */
     public function store(Request $request)
     {
+        if (auth()->user()->hasPermission('add_warehouses') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
         $request->validate([
             'capacity' => 'required|numeric',
             'photo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -70,6 +79,9 @@ class WarehouseController extends Controller
      */
     public function show($id)
     {
+        if (auth()->user()->hasPermission('read_warehouses') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
         $warehouse = Warehouse::find($id);
         return view('warehouse.show', compact('warehouse'));
     }
@@ -82,6 +94,9 @@ class WarehouseController extends Controller
      */
     public function edit($id)
     {
+        if (auth()->user()->hasPermission('edit_warehouses') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
         $users = User::where('role_id', 6)->get();
         $commodities = Commodity::all();
         $warehouse = Warehouse::find($id);
@@ -97,6 +112,9 @@ class WarehouseController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (auth()->user()->hasPermission('edit_warehouses') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
         $request->validate([
             'capacity' => 'required|numeric',
             'photo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -144,6 +162,9 @@ class WarehouseController extends Controller
      */
     public function destroy($id)
     {
+        if (auth()->user()->hasPermission('delete_warehouses') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
         $warehouse = Warehouse::find($id);
         if (isset($warehouse->photo) AND $warehouse->photo != 'warehouses/default.png') {
             Storage::delete($warehouse->photo);

@@ -19,6 +19,7 @@
                             <tr>
                                 <th>Nama</th>
                                 <th>Profil</th>
+                                <th>Email</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -28,6 +29,7 @@
                             <tr>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->role->display_name }}</td>
+                                <td>{{ $user->email }}</td>
                                 <td class="text-right">
                                     <a href="/users/{{$user->id}}" class="btn btn-sm btn-primary text-white"><i class="fa fa-eye text-white"></i> Lihat</a>
                                     <a href="/users/{{$user->id}}/edit" class="btn btn-sm btn-info text-white"><i class="fa fa-edit text-white"></i> Ubah</a>

@@ -99,78 +99,7 @@
                                             </thead>
 
                                             <tbody>
-                                                    <tr>
-                                                        <td>A</td>
-                                                        <td>12-01-2019</td>
-                                                        <td>0981283791</td>
-                                                        <td>Sanana</td>
-                                                        <td>12</td>
-                                                        <td>2000000</td>
-                                                        <td>3000000</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>B</td>
-                                                        <td>12-01-2019</td>
-                                                        <td>0981283791</td>
-                                                        <td>Sanana</td>
-                                                        <td>12</td>
-                                                        <td>4000000</td>
-                                                        <td>5000000</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>A</td>
-                                                        <td>12-01-2019</td>
-                                                        <td>0981283791</td>
-                                                        <td>Sanana</td>
-                                                        <td>12</td>
-                                                        <td>12000000</td>
-                                                        <td>14000000</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>A</td>
-                                                        <td>12-01-2019</td>
-                                                        <td>0981283791</td>
-                                                        <td>Sanana</td>
-                                                        <td>12</td>
-                                                        <td>6000000</td>
-                                                        <td>7000000</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>A</td>
-                                                        <td>12-01-2019</td>
-                                                        <td>0981283791</td>
-                                                        <td>Sanana</td>
-                                                        <td>12</td>
-                                                        <td>8000000</td>
-                                                        <td>9000000</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>A</td>
-                                                        <td>12-01-2019</td>
-                                                        <td>0981283791</td>
-                                                        <td>Sanana</td>
-                                                        <td>12</td>
-                                                        <td>10000000</td>
-                                                        <td>11000000</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>C</td>
-                                                        <td>12-01-2019</td>
-                                                        <td>0981283791</td>
-                                                        <td>Sanana</td>
-                                                        <td>12</td>
-                                                        <td>12000000</td>
-                                                        <td>14000000</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>B</td>
-                                                        <td>12-01-2019</td>
-                                                        <td>0981283791</td>
-                                                        <td>Sanana</td>
-                                                        <td>12</td>
-                                                        <td>15000000</td>
-                                                        <td>16000000</td>
-                                                    </tr>
+                                                    
                                             </tbody>
                                         </table>
                                     </div>
@@ -261,10 +190,10 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="custom-tabs-three-history" role="tabpanel" aria-labelledby="custom-tabs-three-history-tab">
-                                Morbi turpis dolor, vulputate vitae felis non, tincidunt congue mauris. Phasellus volutpat augue id mi placerat mollis. Vivamus faucibus eu massa eget condimentum. Fusce nec hendrerit sem, ac tristique nulla. Integer vestibulum orci odio. Cras nec augue ipsum. Suspendisse ut velit condimentum, mattis urna a, malesuada nunc. Curabitur eleifend facilisis velit finibus tristique. Nam vulputate, eros non luctus efficitur, ipsum odio volutpat massa, sit amet sollicitudin est libero sed ipsum. Nulla lacinia, ex vitae gravida fermentum, lectus ipsum gravida arcu, id fermentum metus arcu vel metus. Curabitur eget sem eu risus tincidunt eleifend ac ornare magna.
+                                
                             </div>
                             <div class="tab-pane fade" id="custom-tabs-three-acounting" role="tabpanel" aria-labelledby="custom-tabs-three-acounting-tab">
-                                Pellentesque vestibulum commodo nibh nec blandit. Maecenas neque magna, iaculis tempus turpis ac, ornare sodales tellus. Mauris eget blandit dolor. Quisque tincidunt venenatis vulputate. Morbi euismod molestie tristique. Vestibulum consectetur dolor a vestibulum pharetra. Donec interdum placerat urna nec pharetra. Etiam eget dapibus orci, eget aliquet urna. Nunc at consequat diam. Nunc et felis ut nisl commodo dignissim. In hac habitasse platea dictumst. Praesent imperdiet accumsan ex sit amet facilisis.
+                                
                             </div>
                         </div>
                     </div>

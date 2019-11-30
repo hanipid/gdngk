@@ -17,11 +17,15 @@ class StockController extends Controller
      */
     public function index()
     {
-        // $incomingGoods = IncomingGoods::all();
-        $incomingGoods = IncomingGoods::where('warehouse_id', 3)
+        if (auth()->user()->hasPermission('browse_incoming_goods') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
+        $warehouse = Warehouse::find(3);
+        // $warehouse = Warehouse::where('employee_id', auth()->user()->id);
+        $incomingGoods = IncomingGoods::where('warehouse_id', $warehouse->id)
                             ->groupBy('farmer_id')->get();
                             // dd($incomingGoods);
-        return view('stock.index', compact('incomingGoods'));
+        return view('stock.index', compact('incomingGoods', 'warehouse'));
     }
 
     /**
@@ -31,6 +35,9 @@ class StockController extends Controller
      */
     public function create()
     {
+        if (auth()->user()->hasPermission('add_incoming_goods') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
         $farmers = User::where('role_id', 3)->get();
         $commodityGrades = CommodityGrade::where('commodity_id', 4)
                             ->orderBy('name', 'asc')
@@ -46,7 +53,9 @@ class StockController extends Controller
      */
     public function store(Request $request)
     {
-
+        if (auth()->user()->hasPermission('add_incoming_goods') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
         $warehouse = Warehouse::where('user_id', auth()->user()->id)->first(); // satu petugas gudang hanya punya akses ke satu gudang
         $employee = auth()->user();
         for ($i=0; $i < count($request->commodityGradeId); $i++) { 
@@ -72,6 +81,9 @@ class StockController extends Controller
      */
     public function show($warehouseId, $farmerId)
     {
+        if (auth()->user()->hasPermission('read_incoming_goods') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
         $incomingGoods = IncomingGoods::where('warehouse_id', $warehouseId)
                             ->where('farmer_id', $farmerId)
                             ->get();
@@ -87,6 +99,9 @@ class StockController extends Controller
      */
     public function edit($id)
     {
+        if (auth()->user()->hasPermission('edit_incoming_goods') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
         $incomingGoods = IncomingGoods::find($id);
         return view('stock.edit', compact('incomingGoods'));
     }
@@ -100,6 +115,9 @@ class StockController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (auth()->user()->hasPermission('edit_incoming_goods') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
         $request->validate([
             'weight' => 'required|numeric'
         ]);
@@ -119,6 +137,9 @@ class StockController extends Controller
      */
     public function destroy($id)
     {
+        if (auth()->user()->hasPermission('delete_incoming_goods') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
         $incomingGoods = IncomingGoods::find($id);
         $tobeDeleted = IncomingGoods::where('warehouse_id', $incomingGoods->warehouse_id)
                                     ->where('farmer_id', $incomingGoods->farmer_id)->get()->toArray();
@@ -135,6 +156,9 @@ class StockController extends Controller
      */
     public function destroyGrade($id)
     {
+        if (auth()->user()->hasPermission('delete_incoming_goods') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
         IncomingGoods::find($id)->delete();
         return back();
     }

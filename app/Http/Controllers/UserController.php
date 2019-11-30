@@ -20,7 +20,7 @@ class UserController extends Controller
         if (auth()->user()->hasPermission('browse_users') === false) {
             return redirect('/home')->with('danger', 'You don\'t have permissions');
         }
-        $users = User::all();
+        $users = User::where('role_id', '>', 1)->get();
         return view('users/index', compact('users'));
     }
 
@@ -34,7 +34,7 @@ class UserController extends Controller
         if (auth()->user()->hasPermission('add_users') === false) {
             return redirect('/home')->with('danger', 'You don\'t have permissions');
         }
-        $roles = Role::all();
+        $roles = Role::where('id', '>', 1)->get();
         return view('users/create', compact('roles'));
     }
 
@@ -53,7 +53,7 @@ class UserController extends Controller
         $request->validate([
             'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'email' => 'unique:users|email:rfc,dns',
-            'nik' => 'numeric',
+            'nik' => 'unique:users|numeric',
             'password' => 'required|confirmed|min:6',
         ]);
 
@@ -98,7 +98,7 @@ class UserController extends Controller
         }
 
         $user = User::find($id);
-        $roles = Role::all();
+        $roles = Role::where('id', '>', 1)->get();
 
         return view('users/edit', compact('user', 'roles'));
     }

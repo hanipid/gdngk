@@ -12,7 +12,7 @@
         <div class="row">
             @method('put')
             @csrf
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <div class="card">
                     <div class="card-body">
                         <div class="form-group row">
@@ -28,7 +28,7 @@
                                 @enderror
                             </div>
                         </div>
-                        
+
                         <div class="form-group row">
                             <label for="email" class="col-md-4 col-form-label">Email</label>
                             <div class="col-md-8">
@@ -42,7 +42,7 @@
                         <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label">Password</label>
                             <div class="col-md-8">
-                                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Password">
+                                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Biarkan kosong bila tidak perlu mengubah password">
                                 @error('password')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -52,7 +52,7 @@
                         <div class="form-group row">
                             <label for="password_confirmation" class="col-md-4 col-form-label">Ulangi Password</label>
                             <div class="col-md-8">
-                                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password_confirmation" name="password_confirmation" placeholder="Password">
+                                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password_confirmation" name="password_confirmation" placeholder="Biarkan kosong bila tidak perlu mengubah password">
                                 @error('password')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -114,7 +114,7 @@
                 </div> {{-- /.card --}}
             </div> {{-- /.col-md-6 --}}
 
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <div class="card">
                     <div class="card-body">
                         <div class="form-group">

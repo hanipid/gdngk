@@ -15,6 +15,11 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0 card-title">{{$warehouse->commodity->name}}</h5>
+                        <p class="mb-0 card-tools">Alamat: {{$warehouse->address}}</p>
+                    </div>
+
                     <div class="card-body table-responsive">
                         <table class="table table-hover table-sm" id="datatables">
                             <thead>
