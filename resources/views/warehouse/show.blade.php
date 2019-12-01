@@ -117,6 +117,12 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
+                                                        <label for="user_id" class="col-md-4">Nama Petugas</label>
+                                                        <div class="col-md-8">
+                                                            {{$warehouse->employee->name}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
                                                         <label for="commodity_id" class="col-md-4">Komoditas</label>
                                                         <div class="col-md-8">
                                                             {{$warehouse->commodity->name}}

@@ -11,11 +11,21 @@
                 @csrf
                 <div class="card-body">
                     <div class="form-group row">
-                        <label for="user_id" class="col-md-4 col-form-label">Nama Pemilik</label>
+                        <label for="user_id" class="col-md-4 col-form-label">Pemilik</label>
                         <div class="col-md-8">
                             <select class="form-control" name="user_id" id="user_id">
                                 @foreach ($users as $user)
                                 <option value="{{$user->id}}" @if(old('user_id') == $user->id) selected @endif>{{$user->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="employee_id" class="col-md-4 col-form-label">Petugas Gudang</label>
+                        <div class="col-md-8">
+                            <select class="form-control" name="employee_id" id="employee_id">
+                                @foreach ($employees as $employee)
+                                <option value="{{$employee->id}}" @if(old('employee_id') == $employee->id) selected @endif>{{$employee->name}}</option>
                                 @endforeach
                             </select>
                         </div>

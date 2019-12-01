@@ -35,9 +35,10 @@ class WarehouseController extends Controller
         if (auth()->user()->hasPermission('add_warehouses') === false) {
             return redirect('/home')->with('danger', 'You don\'t have permissions');
         }
-        $users = User::where('role_id', 6)->get();
+        $users = User::where('role_id', 6)->get(); // pemilik_gudang
+        $employees = User::where('role_id', 5)->get(); // petugas_gudang
         $commodities = Commodity::all();
-        return view('warehouse.create', compact('users', 'commodities'));
+        return view('warehouse.create', compact('users', 'commodities', 'employees'));
     }
 
     /**
@@ -97,10 +98,11 @@ class WarehouseController extends Controller
         if (auth()->user()->hasPermission('edit_warehouses') === false) {
             return redirect('/home')->with('danger', 'You don\'t have permissions');
         }
-        $users = User::where('role_id', 6)->get();
+        $users = User::where('role_id', 6)->get(); // pemilik_gudang
+        $employees = User::where('role_id', 5)->get(); // petugas_gudang
         $commodities = Commodity::all();
         $warehouse = Warehouse::find($id);
-        return view('warehouse.edit', compact('users', 'commodities', 'warehouse'));
+        return view('warehouse.edit', compact('users', 'employees', 'commodities', 'warehouse'));
     }
 
     /**
@@ -141,6 +143,7 @@ class WarehouseController extends Controller
 
         Warehouse::find($id)->update([
             'user_id' => $request->user_id,
+            'employee_id' => $request->employee_id,
             'commodity_id' => $request->commodity_id,
             'capacity' => $request->capacity,
             'address' => $request->address,

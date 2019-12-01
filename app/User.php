@@ -48,10 +48,6 @@ class User extends \TCG\Voyager\Models\User
         $this->attributes['avatar'] = 'users/' . $this->nik . '.' . $value->getClientOriginalExtension();
     }
 
-
-    /**
-     * Get the comments for the blog post.
-     */
     public function warehouses()
     {
         return $this->hasMany('App\Warehouse');
