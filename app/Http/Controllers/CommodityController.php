@@ -14,6 +14,9 @@ class CommodityController extends Controller
      */
     public function index()
     {
+        if (auth()->user()->hasPermission('browse_commodities') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
         // if (!$this->authorize('browse', \App\Commodity::first()))
         //     redirect('/home');
         // $commodities[] = (object) ['id' => 1, 'name' => 'Cabai'];
@@ -29,6 +32,9 @@ class CommodityController extends Controller
      */
     public function create()
     {
+        if (auth()->user()->hasPermission('add_commodities') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
         return view('commodity.create', compact('roles'));
     }
 
@@ -40,6 +46,9 @@ class CommodityController extends Controller
      */
     public function store(Request $request)
     {
+        if (auth()->user()->hasPermission('add_commodities') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
         Commodity::create($request->all());
         return redirect('commodities');
     }
@@ -52,11 +61,9 @@ class CommodityController extends Controller
      */
     public function show($id)
     {
-        // if ($id == 1) {
-        //     $commodity = (object) ['id' => 1, 'name' => 'Cabai', 'rent' => 250];
-        // } else {
-        //     $commodity = (object) ['id' => 2, 'name' => 'Kentang', 'rent' => 250];
-        // }
+        if (auth()->user()->hasPermission('read_commodities') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
         $commodity = Commodity::find($id);
 
         // $grades[] = (object) ['id' => 1, 'commodity_id' => 1, 'name' => 'Kelas A', 'price' => 60000];
@@ -74,11 +81,9 @@ class CommodityController extends Controller
      */
     public function edit($id)
     {
-        // if ($id == 1) {
-        //     $commodity = (object) ['id' => 1, 'name' => 'Cabai', 'rent' => 250];
-        // } else {
-        //     $commodity = (object) ['id' => 2, 'name' => 'Kentang', 'rent' => 250];
-        // }
+        if (auth()->user()->hasPermission('edit_commodities') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
 
         $commodity = Commodity::find($id);
 
@@ -94,6 +99,10 @@ class CommodityController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (auth()->user()->hasPermission('edit_commodities') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
+
         Commodity::where('id', $id)->update($request->except(['_method', '_token']));
         return redirect('commodities');
     }
@@ -106,6 +115,9 @@ class CommodityController extends Controller
      */
     public function destroy($id)
     {
+        if (auth()->user()->hasPermission('delete_commodities') === false) {
+            return redirect('/home')->with('danger', 'You don\'t have permissions');
+        }
         Commodity::where('id', $id)->delete();
         return redirect('/commodities');
     }
