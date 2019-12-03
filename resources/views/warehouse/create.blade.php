@@ -31,9 +31,9 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="nomor_tanggal" class="col-md-4 col-form-label">Nomor / Tanggal TDG</label>
+                        <label for="number_date" class="col-md-4 col-form-label">Nomor / Tanggal TDG</label>
                         <div class="input-group col-8">
-                            <input type="text" class="form-control" name="nomor_tanggal" id="nomor_tanggal" placeholder="Koordinat" value="{{old('nomor_tanggal')}}">
+                            <input type="text" class="form-control" name="number_date" id="number_date" placeholder="Nomor / Tanggal TDG" value="{{old('number_date')}}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -103,8 +103,8 @@
                             <textarea class="form-control" name="address" id="address" placeholder="Alamat gudang" value="{{old('address')}}"></textarea>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <div id="myMap"></div>
+                    <div class="form-group">
+                        <div id="MapLocation" style="height: 350px"></div>
                     </div>
                     <div class="form-group row">
                         <label for="latitude" class="col-md-4 col-form-label">Latitude</label>
@@ -138,7 +138,6 @@
                             <label class="custom-file-label" for="photo">Pilih foto</label>
                         </div>
                     </div>
-                    <div id="map"></div>
                 </div> {{-- /.form-group --}}
             </div> {{-- /.card-body --}}
         </div> {{-- /.card --}}
@@ -158,85 +157,99 @@
 @stop
 
 @section('css')
-<style>
-       /* Set the size of the div element that contains the map */
-      #map {
-        height: 400px;  /* The height is 400 pixels */
-        width: 100%;  /* The width is the width of the web page */
-       }
-    </style>
+<link rel="stylesheet" type="text/css" href="https://npmcdn.com/leaflet@0.7.7/dist/leaflet.css">
+<link rel="stylesheet" type="text/css" href="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.css">
 @endsection
 
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
-{{-- <script src="https://maps.googleapis.com/maps/api/js?v=AIzaSyDAl6lMnNcTXCPiiIzUrK-qvCMFPxzjIYA&sensor=false"> --}}
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAl6lMnNcTXCPiiIzUrK-qvCMFPxzjIYA"
-  type="text/javascript"></script>
-</script>
+<script type="text/javascript" src="https://npmcdn.com/leaflet@0.7.7/dist/leaflet.js"></script>
+<script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
+<script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.js"></script>
+
 <script>
 $(document).ready(function () {
-bsCustomFileInput.init();
+    bsCustomFileInput.init();
 });
-initMap();
-// Initialize and add the map
-function initMap() {
-  // The location of Uluru
-  var uluru = {lat: -25.344, lng: 131.036};
-  // The map, centered at Uluru
-  var map = new google.maps.Map(
-      document.getElementById('map'), {zoom: 4, center: uluru});
-  // The marker, positioned at Uluru
-  var marker = new google.maps.Marker({position: uluru, map: map});
-}
-// var map;
-// var marker;
-// var myLatlng = new google.maps.LatLng(20.268455824834792,85.84099235520011);
-// var geocoder = new google.maps.Geocoder();
-// var infowindow = new google.maps.InfoWindow();
-// function initialize(){
-//     var mapOptions = {
-//         zoom: 18,
-//         center: myLatlng,
-//         mapTypeId: google.maps.MapTypeId.ROADMAP
-//     };
 
-//     map = new google.maps.Map(document.getElementById("myMap"), mapOptions);
+$(function() {
+	// use below if you want to specify the path for leaflet's images
+	//L.Icon.Default.imagePath = '@Url.Content("~/Content/img/leaflet")';
 
-//     marker = new google.maps.Marker({
-//         map: map,
-//         position: myLatlng,
-//         draggable: true 
-//     }); 
+	var curLocation = [0, 0];
+	// use below if you have a model
+	// var curLocation = [@Model.Location.Latitude, @Model.Location.Longitude];
 
-//     geocoder.geocode({'latLng': myLatlng }, function(results, status) {
-//         if (status == google.maps.GeocoderStatus.OK) {
-//             if (results[0]) {
-//                 $('#latitude,#longitude').show();
-//                 $('#address').val(results[0].formatted_address);
-//                 $('#latitude').val(marker.getPosition().lat());
-//                 $('#longitude').val(marker.getPosition().lng());
-//                 infowindow.setContent(results[0].formatted_address);
-//                 infowindow.open(map, marker);
-//             }
-//         }
-//     });
+	if (curLocation[0] == 0 && curLocation[1] == 0) {
+		curLocation = [-7.599398, 111.9676883];
+	}
 
-//     google.maps.event.addListener(marker, 'dragend', function() {
+	var map = L.map('MapLocation').setView(curLocation, 12);
 
-//         geocoder.geocode({'latLng': marker.getPosition()}, function(results, status) {
-//             if (status == google.maps.GeocoderStatus.OK) {
-//                 if (results[0]) {
-//                     $('#address').val(results[0].formatted_address);
-//                     $('#latitude').val(marker.getPosition().lat());
-//                     $('#longitude').val(marker.getPosition().lng());
-//                     infowindow.setContent(results[0].formatted_address);
-//                     infowindow.open(map, marker);
-//                 }
-//             }
-//         });
-//     });
+	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+		attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+	}).addTo(map);
 
-// }
-// google.maps.event.addDomListener(window, 'load', initialize);
+	map.attributionControl.setPrefix(false);
+
+	var marker = new L.marker(curLocation, {
+		draggable: 'true'
+	});
+
+	function getPosition(e) {
+		console.log(e.latlng);
+		var lat = e.latlng.lat;
+		var lng = e.latlng.lng;
+		var position = [parseInt(lat), parseInt(lng)];
+		$("#latitude").val(lat);
+		$("#longitude").val(lng);
+		marker.setLatLng([lat,lng], {
+			draggable: 'true'
+		}).update();
+	}
+
+	marker.on('dragend', function(event) {
+		var position = marker.getLatLng();
+		marker.setLatLng(position, {
+			draggable: 'true'
+		}).update();
+		$("#latitude").val(position.lat);
+		$("#longitude").val(position.lng).keyup();
+	});
+
+	map.on('click', function(e) {
+		getPosition(e);
+	} );
+
+	marker.on('click', function(e) {
+		getPosition(e);
+		console.log('marker');
+	} );
+
+	$("#latitude, #longitude").change(function() {
+		var position = [parseInt($("#latitude").val()), parseInt($("#longitude").val())];
+		marker.setLatLng(position, {
+			draggable: 'true'
+		}).bindPopup(position).update();
+		map.panTo(position);
+	});
+
+	var searchControl = new L.esri.Controls.Geosearch().addTo(map);
+	var results = new L.LayerGroup().addTo(map);
+
+	searchControl.on('results', function(data){
+		results.clearLayers();
+		for (var i = data.results.length - 1; i >= 0; i--) {
+			// results.addLayer(L.marker(data.results[i].latlng));
+			results.addLayer(marker.setLatLng(data.results[i].latlng, {
+				draggable: 'true'
+			}).update());
+			$("#latitude").val(data.results[i].latlng.lat);
+			$("#longitude").val(data.results[i].latlng.lng);
+		}
+	});
+
+	map.addLayer(marker);
+});
 </script>
 @stop

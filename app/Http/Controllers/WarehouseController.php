@@ -60,6 +60,7 @@ class WarehouseController extends Controller
         }
         $request->validate([
             'capacity' => 'required|numeric',
+            'unit_area' => 'required|numeric',
             'photo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'address' => 'required',
         ]);
@@ -106,7 +107,10 @@ class WarehouseController extends Controller
         $employees = User::where('role_id', 5)->get(); // petugas_gudang
         $commodities = Commodity::all();
         $warehouse = Warehouse::find($id);
-        return view('warehouse.edit', compact('users', 'employees', 'commodities', 'warehouse'));
+        $warehouseCategories = WarehouseCategory::all();
+        $districts = District::all();
+        $villages = Village::all();
+        return view('warehouse.edit', compact('users', 'employees', 'commodities', 'warehouse', 'warehouseCategories', 'districts', 'villages'));
     }
 
     /**
@@ -123,10 +127,9 @@ class WarehouseController extends Controller
         }
         $request->validate([
             'capacity' => 'required|numeric',
+            'unit_area' => 'required|numeric',
             'photo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'address' => 'required',
-            'kecamatan' => 'required',
-            'desa' => 'required'
         ]);
 
         $warehouse = Warehouse::find($id);
@@ -149,10 +152,13 @@ class WarehouseController extends Controller
             'user_id' => $request->user_id,
             'employee_id' => $request->employee_id,
             'commodity_id' => $request->commodity_id,
+            'warehouse_category_id' => $request->warehouse_category_id,
+            'number_date' => $request->number_date,
             'capacity' => $request->capacity,
+            'unit_area' => $request->unit_area,
             'address' => $request->address,
-            'kecamatan' => $request->kecamatan,
-            'desa' => $request->desa,
+            'district_id' => $request->district_id,
+            'village_id' => $request->village_id,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
             'information' => $request->information,

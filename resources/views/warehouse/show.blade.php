@@ -107,7 +107,7 @@
                             </div> {{-- /.tab-pane --}}
                             <div class="tab-pane fade" id="custom-tabs-three-profile" role="tabpanel" aria-labelledby="custom-tabs-three-profile-tab">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-7">
                                         <div class="card">
                                                 <div class="card-body">
                                                     <div class="row">
@@ -159,15 +159,9 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <label for="latitude" class="col-md-4">Latitude</label>
-                                                        <div class="col-8">
-                                                            {{$warehouse->latitude}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <label for="longitude" class="col-md-4">Longitude</label>
-                                                        <div class="col-8">
-                                                            {{$warehouse->longitude}}
+                                                        <label class="col-md-4">Peta</label>
+                                                        <div class="col-md-8">
+                                                            <div id="MapLocation" style="height: 350px"></div>
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -179,7 +173,7 @@
                                                 </div> {{-- /.card-body --}}
                                         </div> {{-- /.card --}}
                                     </div> {{-- /.col-md-6 --}}
-                                    <div class="col-md-6">
+                                    <div class="col-md-5">
                                         <div class="card">
                                             <div class="card-body">
                                                 <div class="form-group">
@@ -218,9 +212,17 @@
 @stop
 
 
+@section('css')
+<link rel="stylesheet" type="text/css" href="https://npmcdn.com/leaflet@0.7.7/dist/leaflet.css">
+<link rel="stylesheet" type="text/css" href="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.css">
+@endsection
+
 
 @section('js')
 <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.4.3/dist/js/tabulator.min.js"></script>
+<script type="text/javascript" src="https://npmcdn.com/leaflet@0.7.7/dist/leaflet.js"></script>
+<script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
+<script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.js"></script>
 <script>
     //Trigger setFilter function with correct parameters
     function updateFilter(){
@@ -309,6 +311,35 @@
                 },         
             },
         ]
+    });
+
+    $(function() {
+        // use below if you want to specify the path for leaflet's images
+        //L.Icon.Default.imagePath = '@Url.Content("~/Content/img/leaflet")';
+
+        var curLocation = [{{$warehouse->latitude}}, {{$warehouse->longitude}}];
+        // use below if you have a model
+        // var curLocation = [@Model.Location.Latitude, @Model.Location.Longitude];
+
+        if (curLocation[0] == 0 && curLocation[1] == 0) {
+            curLocation = [-7.599398, 111.9676883];
+        }
+
+        var map = L.map('MapLocation').setView(curLocation, 15);
+
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        map.attributionControl.setPrefix(false);
+
+        var marker = new L.marker(curLocation);
+
+        map.addLayer(marker);
+
+        $('a[data-toggle="pill"]').on('shown.bs.tab', function (e) {
+            map.invalidateSize()
+        })
     });
 </script>
 @endsection
