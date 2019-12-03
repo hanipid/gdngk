@@ -321,7 +321,7 @@
         // use below if you have a model
         // var curLocation = [@Model.Location.Latitude, @Model.Location.Longitude];
 
-        if (curLocation[0] == 0 && curLocation[1] == 0) {
+        if ( curLocation == 0 ) {
             curLocation = [-7.599398, 111.9676883];
         }
 
