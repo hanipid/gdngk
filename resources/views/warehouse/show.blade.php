@@ -123,9 +123,21 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
+                                                        <label for="commodity_id" class="col-md-4">Nomor / Tanggal TDG</label>
+                                                        <div class="col-md-8">
+                                                            {{$warehouse->number_date}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
                                                         <label for="commodity_id" class="col-md-4">Komoditas</label>
                                                         <div class="col-md-8">
                                                             {{$warehouse->commodity->name}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <label class="col-md-4">Kategori Gudang</label>
+                                                        <div class="col-md-8">
+                                                            {{$warehouse->warehouseCategory->name}}
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -135,21 +147,15 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
+                                                        <label class="col-md-4">Luas</label>
+                                                        <div class="col-md-8">
+                                                            {{$warehouse->unit_area}} m<sup>2</sup>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
                                                         <label for="address" class="col-md-4">Alamat</label>
                                                         <div class="col-8">
-                                                            {{$warehouse->address}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <label for="kecamatan" class="col-md-4">Kecamatan</label>
-                                                        <div class="col-8">
-                                                            {{$warehouse->kecamatan}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <label for="desa" class="col-md-4">Desa</label>
-                                                        <div class="col-8">
-                                                            {{$warehouse->desa}}
+                                                            {{$warehouse->address}} Desa {{ ucfirst($warehouse->village->name) }} Kecamatan {{ ucfirst($warehouse->district->name) }}
                                                         </div>
                                                     </div>
                                                     <div class="row">

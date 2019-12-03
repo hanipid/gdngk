@@ -7,6 +7,9 @@ use App\Warehouse;
 use App\User;
 use App\Commodity;
 use Illuminate\Support\Facades\Storage;
+use App\WarehouseCategory;
+use App\District;
+use App\Village;
 
 class WarehouseController extends Controller
 {
@@ -38,7 +41,10 @@ class WarehouseController extends Controller
         $users = User::where('role_id', 6)->get(); // pemilik_gudang
         $employees = User::where('role_id', 5)->get(); // petugas_gudang
         $commodities = Commodity::all();
-        return view('warehouse.create', compact('users', 'commodities', 'employees'));
+        $warehouseCategories = WarehouseCategory::all();
+        $districts = District::all();
+        $villages = Village::all();
+        return view('warehouse.create', compact('users', 'commodities', 'employees', 'districts', 'villages', 'warehouseCategories'));
     }
 
     /**
@@ -56,8 +62,6 @@ class WarehouseController extends Controller
             'capacity' => 'required|numeric',
             'photo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'address' => 'required',
-            'kecamatan' => 'required',
-            'desa' => 'required'
         ]);
 
         $photo = null;

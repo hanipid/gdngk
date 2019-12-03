@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Warehouse extends Model
 {
-	protected $fillable = ['user_id', 'employee_id', 'commodity_id', 'capacity', 'address', 'kecamatan', 'desa', 'latitude', 'longitude', 'information', 'photo'];
+	protected $fillable = ['user_id', 'employee_id', 'commodity_id', 'warehouse_category_id', 'capacity', 'address', 'district_id', 'village_id', 'number_date', 'unit_area', 'latitude', 'longitude', 'information', 'photo'];
 
 	public function setCapacityAttribute($value)
 	{
@@ -32,5 +32,20 @@ class Warehouse extends Model
     public function commodity()
     {
     	return $this->belongsTo('App\Commodity');
+    }
+
+    public function warehouseCategory()
+    {
+        return $this->belongsTo('App\WarehouseCategory');
+    }
+
+    public function district()
+    {
+        return $this->belongsTo('App\District');
+    }
+
+    public function village()
+    {
+        return $this->belongsTo('App\Village');
     }
 }
