@@ -142,15 +142,15 @@ class UserController extends Controller
             $request->avatar->storeAs($path, $avatar);
         }
 
-        $role_id = $request->role_id ? $user->role_id : $request->role_id;
-        $email = $request->email ? $user->email : $request->email;
-        $nik = $request->nik ? $user->nik : $request->nik;
-        $name = $request->name ? $user->name : $request->name;
-        $address = $request->address ? $user->address : $request->address;
-        $phone = $request->phone ? $user->phone : $request->phone;
-        $company = $request->company ? $user->company : $request->company;
-        $bank = $request->bank ? $user->bank : $request->bank;
-        $bank_account = $request->bank_account ? $user->bank_account : $request->bank_account;
+        $role_id = $request->role_id ? $request->role_id : $user->role_id;
+        $email = $request->email ? $request->email : $user->email;
+        $nik = $request->nik ? $request->nik : $user->nik;
+        $name = $request->name ? $request->name : $user->name;
+        $address = $request->address ? $request->address : $user->address;
+        $phone = $request->phone ? $request->phone : $user->phone;
+        $company = $request->company ? $request->company : $user->company;
+        $bank = $request->bank ? $request->bank : $user->bank;
+        $bank_account = $request->bank_account ? $request->bank_account : $user->bank_account;
 
         if (trim($request->password) != '') {
             User::where('id', $user->id)
