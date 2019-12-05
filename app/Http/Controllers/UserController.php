@@ -110,17 +110,17 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
         if (auth()->user()->hasPermission('edit_users') === false) {
             return redirect('/home')->with('danger', 'You don\'t have permissions');
         }
 
-        $user = User::find($id);
+        $user = User::find($user->id);
         // dd(array_filter($request->except(['_method'])));
         $request->validate([
             'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'email' => 'sometimes|email:rfc,dns|unique:users,email,' . $id,
+            'email' => 'sometimes|email:rfc,dns|unique:users,email,' . $user->id,
             'nik' => 'numeric'
         ]);
         if (isset($request->password)) {
@@ -142,33 +142,43 @@ class UserController extends Controller
             $request->avatar->storeAs($path, $avatar);
         }
 
+        $role_id = $request->role_id ? $user->role_id : $request->role_id;
+        $email = $request->email ? $user->email : $request->email;
+        $nik = $request->nik ? $user->nik : $request->nik;
+        $name = $request->name ? $user->name : $request->name;
+        $address = $request->address ? $user->address : $request->address;
+        $phone = $request->phone ? $user->phone : $request->phone;
+        $company = $request->company ? $user->company : $request->company;
+        $bank = $request->bank ? $user->bank : $request->bank;
+        $bank_account = $request->bank_account ? $user->bank_account : $request->bank_account;
+
         if (trim($request->password) != '') {
-            User::where('id', $id)
+            User::where('id', $user->id)
                     ->update([
-                        'role_id' => $request->role_id,
-                        'email' => $request->email,
+                        'role_id' => $role_id,
+                        'email' => $email,
                         'password' => Hash::make($request->password),
-                        'nik' => $request->nik,
-                        'name' => $request->name,
-                        'address' => $request->address,
-                        'phone' => $request->phone,
-                        'company' => $request->company,
-                        'bank' => $request->bank,
-                        'bank_account' => $request->bank_account,
+                        'nik' => $nik,
+                        'name' => $name,
+                        'address' => $address,
+                        'phone' => $phone,
+                        'company' => $company,
+                        'bank' => $bank,
+                        'bank_account' => $bank_account,
                         'avatar' => $path . '/' . $avatar
                     ]);
         } else {
-            User::where('id', $id)
+            User::where('id', $user->id)
                     ->update([
-                        'role_id' => $request->role_id,
-                        'email' => $request->email,
-                        'nik' => $request->nik,
-                        'name' => $request->name,
-                        'address' => $request->address,
-                        'phone' => $request->phone,
-                        'company' => $request->company,
-                        'bank' => $request->bank,
-                        'bank_account' => $request->bank_account,
+                        'role_id' => $role_id,
+                        'email' => $email,
+                        'nik' => $nik,
+                        'name' => $name,
+                        'address' => $address,
+                        'phone' => $phone,
+                        'company' => $company,
+                        'bank' => $bank,
+                        'bank_account' => $bank_account,
                         'avatar' => $path . '/' . $avatar
                     ]);
         }
