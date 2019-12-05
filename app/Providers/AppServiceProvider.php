@@ -33,7 +33,8 @@ class AppServiceProvider extends ServiceProvider
             $event->menu->add([
                 'text' => 'Hai, ' . auth()->user()->name . '!',
                 // 'topnav' => true,
-                'icon' => 'avatar'
+                'icon' => 'avatar',
+                'url' => 'users/' . auth()->user()->id
             ]);
             $event->menu->add(...collect($this->prepareMenu(menu('frontend', '_json'))->toArray()));
         });

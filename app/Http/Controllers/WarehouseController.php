@@ -38,8 +38,14 @@ class WarehouseController extends Controller
         if (auth()->user()->hasPermission('add_warehouses') === false) {
             return redirect('/home')->with('danger', 'You don\'t have permissions');
         }
+        $warehouses = Warehouse::all();
         $users = User::where('role_id', 6)->get(); // pemilik_gudang
         $employees = User::where('role_id', 5)->get(); // petugas_gudang
+        $array = [];
+        foreach ($warehouses as $warehouse) {
+            $array[] = $warehouse->employee_id;
+        }
+        $employees = $employees->except($array);
         $commodities = Commodity::all();
         $warehouseCategories = WarehouseCategory::all();
         $districts = District::all();
@@ -103,10 +109,18 @@ class WarehouseController extends Controller
         if (auth()->user()->hasPermission('edit_warehouses') === false) {
             return redirect('/home')->with('danger', 'You don\'t have permissions');
         }
+        $warehouses = Warehouse::all();
+        $warehouse = Warehouse::find($id);
         $users = User::where('role_id', 6)->get(); // pemilik_gudang
         $employees = User::where('role_id', 5)->get(); // petugas_gudang
+        $array = [];
+        foreach ($warehouses as $wh) {
+            if ($wh->employee_id != $warehouse->employee_id) {
+                $array[] = $wh->employee_id;
+            }
+        }
+        $employees = $employees->except($array);
         $commodities = Commodity::all();
-        $warehouse = Warehouse::find($id);
         $warehouseCategories = WarehouseCategory::all();
         $districts = District::all();
         $villages = Village::all();

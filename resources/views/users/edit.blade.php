@@ -15,6 +15,7 @@
             <div class="col-md-7">
                 <div class="card">
                     <div class="card-body">
+                        @if (auth()->user()->role_id <= 2)
                         <div class="form-group row">
                             <label for="role_id" class="col-md-4 col-form-label">Profil</label>
                             <div class="col-md-8">
@@ -28,6 +29,7 @@
                                 @enderror
                             </div>
                         </div>
+                        @endif
 
                         <div class="form-group row">
                             <label for="email" class="col-md-4 col-form-label">Email</label>
@@ -39,6 +41,7 @@
                             </div>
                         </div>
 
+                        @if (auth()->user()->id === $user->id)
                         <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label">Password</label>
                             <div class="col-md-8">
@@ -58,7 +61,9 @@
                                 @enderror
                             </div>
                         </div>
+                        @endif
 
+                        @if (auth()->user()->role_id <= 2)
                         <div class="form-group row">
                             <label for="nik" class="col-md-4 col-form-label">NIK</label>
                             <div class="col-md-8">
@@ -110,6 +115,7 @@
                                 <input type="text" class="form-control" id="bank_account" name="bank_account" placeholder="No. Rekening" value="{{$user->bank_account}}">
                             </div>
                         </div>
+                        @endif
                     </div> {{-- /.card-body --}}
                 </div> {{-- /.card --}}
             </div> {{-- /.col-md-6 --}}
