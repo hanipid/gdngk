@@ -178,7 +178,7 @@ class WarehouseController extends Controller
             'information' => $request->information,
             'photo' => $fullPhoto,
         ]);
-        return redirect('/warehouses');
+        return back();
     }
 
     /**

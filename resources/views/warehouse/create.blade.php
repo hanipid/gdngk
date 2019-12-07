@@ -167,9 +167,12 @@
 <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
 <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.js"></script>
 
+@section('plugins.Select2', true)
+
 <script>
 $(document).ready(function () {
     bsCustomFileInput.init();
+    $('#user_id, #employee_id, #commodity_id, #warehouse_category_id, #district_id, #village_id').select2();
 });
 
 $(function() {

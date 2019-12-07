@@ -41,3 +41,12 @@
 	</div> {{-- /.col-md-6 --}}
 </div> {{-- /.row --}}
 @stop
+
+@section('plugins.Select2', true)
+@section('js')
+<script>
+$(document).ready(function () {
+    $('#farmer_id').select2();
+});
+</script>
+@stop
