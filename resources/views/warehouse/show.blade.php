@@ -65,25 +65,25 @@
                                     </div>
                                 </div> {{-- /.row --}}
 
+                                @if ($warehouseReceipts)
                                 <div class="row">
                                     <div class="col-12">
-                                        <div class="form-inline my-2 py-2 float-right">
-                                            <div class="form-group mx-2">
+                                        <div class="my-2 row">
+                                            <div class="col-6 form-group">
                                                 <label>Filter: </label>
                                                 <select class="form-control mx-2" id="filter-field">
                                                     <option value="kelas">Kelas</option>
                                                 </select>
                                             </div>
-                                            <div class="form-group mx-2">
+                                            <div class="col-6 form-group">
                                                 <label>Kata Kunci: </label>
                                                 <select class="form-control mx-2" id="filter-value">
                                                     <option value="">Semua</option>
-                                                    <option value="A">Kelas A</option>
-                                                    <option value="B">Kelas B</option>
-                                                    <option value="C">Kelas C</option>
+                                                    @foreach ($warehouseReceipts[0]->storedGoods as $goods)
+                                                        <option value="{{ str_replace(' ', '_', $goods->commodityGrade->name) }}">{{ $goods->commodityGrade->name }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
-                                            <button id="filter-clear" class="btn btn-outline-primary">Clear</button>
                                         </div>
                                         <table id="kelas" class="table table-sm table-bordered table-striped">
                                             <thead>
@@ -94,16 +94,31 @@
                                                     <th>Petani</th>
                                                     <th>Jumlah Berat</th>
                                                     <th>Harga Modal</th>
-                                                    <th>Jumlah Harga</th>
+                                                    {{-- <th>Jumlah Harga</th> --}}
+                                                    <th></th>
                                                 </tr>
                                             </thead>
 
                                             <tbody>
-                                                    
+                                                @foreach ($warehouseReceipts as $warehouseReceipt)
+                                                    @foreach ($warehouseReceipt->storedGoods as $goods)
+                                                        <tr>
+                                                            <td>{{ str_replace(' ', '_', $goods->commodityGrade->name) }}</td>
+                                                            <td>{{ date('d F Y', strtotime($goods->date)) }}</td>
+                                                            <td>{{ $warehouseReceipt->receipt_number }}</td>
+                                                            <td>{{ $warehouseReceipt->farmer->name }}</td>
+                                                            <td>@ribuan($goods->weight) Kg</td>
+                                                            <td>@rupiah($goods->asking_price)</td>
+                                                            {{-- <td></td> --}}
+                                                            <th><a href="/print/{{$warehouseReceipt->id}}">Cetak</a></th>
+                                                        </tr>
+                                                    @endforeach
+                                                @endforeach
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
+                                @endif
                             </div> {{-- /.tab-pane --}}
                             <div class="tab-pane fade" id="custom-tabs-three-profile" role="tabpanel" aria-labelledby="custom-tabs-three-profile-tab">
                                 <div class="row">
@@ -196,7 +211,7 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="custom-tabs-three-history" role="tabpanel" aria-labelledby="custom-tabs-three-history-tab">
-                                <table class="table table-hover table-sm" id="datatables2">
+                                <table class="table table-hover table-sm" id="riwayat">
                                     <thead>
                                         <tr>
                                             <th>Status</th>
@@ -211,7 +226,7 @@
                                     <tbody>
                                         @foreach ($goodsHistories as $goodsHistory)
                                         <tr>
-                                            <td class="@if($goodsHistory->status == 'masuk') text-success @else text-danger @endif ">{{ $goodsHistory->status }}</td>
+                                            <td class="@if($goodsHistory->status == 'masuk') text-warning @elseif($goodsHistory->status == 'diverifikasi') text-success @elseif ($goodsHistory->status == 'terjual') text-primary @else text-danger @endif ">{{ $goodsHistory->status }}</td>
                                             <td>{{ date('d M Y', strtotime($goodsHistory->created_at)) }}</td>
                                             <td>{{ $goodsHistory->farmer->name }}</td>
                                             <td>{{ $goodsHistory->commodityGrade->commodity->name }}</td>
@@ -235,107 +250,137 @@
 </div>
 @stop
 
+@section('plugins.Datatables', true)
 
 @section('css')
+{{-- <link href="https://unpkg.com/tabulator-tables@4.4.3/dist/css/tabulator.min.css" rel="stylesheet"> --}}
+{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabulator/4.4.3/css/bootstrap/tabulator_bootstrap4.min.css" integrity="sha256-+AmauyGZPl0HNTBQ5AMZBxfzP+rzXJjraezMKpWwWSE=" crossorigin="anonymous" /> --}}
 <link rel="stylesheet" type="text/css" href="https://npmcdn.com/leaflet@0.7.7/dist/leaflet.css">
 <link rel="stylesheet" type="text/css" href="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.css">
 @endsection
 
-
 @section('js')
-<script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.4.3/dist/js/tabulator.min.js"></script>
+{{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.4.3/dist/js/tabulator.min.js"></script> --}}
 <script type="text/javascript" src="https://npmcdn.com/leaflet@0.7.7/dist/leaflet.js"></script>
 <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
 <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.js"></script>
 <script>
-    //Trigger setFilter function with correct parameters
-    function updateFilter(){
 
-        var filter = $("#filter-field").val() == "function" ? customFilter : $("#filter-field").val();
+    $("#riwayat").DataTable();
+    $('#kelas').DataTable();
 
-        if($("#filter-field").val() == "function" ){
-            $("#filter-type").prop("disabled", true);
-            $("#filter-value").prop("disabled", true);
-        }else{
-            $("#filter-type").prop("disabled", false);
-            $("#filter-value").prop("disabled", false);
-        }
+    $('#filter-value').on( 'change', function () {
+        filterColumn( 0 );
+    } );
 
-        table.setFilter(filter, "like", $("#filter-value").val());
-        console.log(filter + ' | ' + $("#filter-type").val() + ' | ' + $("#filter-value").val());
+    function filterColumn ( i ) {
+        $('#kelas').DataTable().column( i ).search(
+            $('#filter-value').val()
+        ).draw();
     }
+    
+    //Trigger setFilter function with correct parameters
+    // function updateFilter(){
 
-    //Update filters on value change
-    $("#filter-field, #filter-type").change(updateFilter);
-    $("#filter-value").change(updateFilter);
+    //     var filter = $("#filter-field").val() == "function" ? customFilter : $("#filter-field").val();
 
-    //Clear filters on "Clear Filters" button click
-    $("#filter-clear").click(function(){
-        $("#filter-field").val("");
-        $("#filter-type").val("=");
-        $("#filter-value").val("");
+    //     if($("#filter-field").val() == "function" ){
+    //         $("#filter-type").prop("disabled", true);
+    //         $("#filter-value").prop("disabled", true);
+    //     }else{
+    //         $("#filter-type").prop("disabled", false);
+    //         $("#filter-value").prop("disabled", false);
+    //     }
 
-        table.clearFilter();
-    });
-    //define table
-    var table = new Tabulator("#kelas", {
-        layout:"fitColumns",
-        pagination:"local",
-        paginationSize:4,
-        paginationSizeSelector:[5, 10, 20, 50, 100],
-        // groupBy: 'kelas',
-        columns: [
-            {title: 'Kelas', field: 'kelas'},
-            {title: 'Tanggal Masuk', field: 'tanggal_masuk'},
-            {title: 'No. Resi', field: 'no_resi'},
-            {title: 'Petani', field: 'petani'},
-            {
-                title: 'Jumlah Berat', 
-                field: 'jumlah_berat',
-                formatter: "money", 
-                formatterParams: { 
-                    decimal: "", 
-                    thousand: ".", 
-                    symbolAfter: " Ton", 
-                    precision: false,
-                },
-                bottomCalc:"sum", 
-                bottomCalcParams: {
-                    precision: false
-                },
-                bottomCalcFormatter: "money",
-                bottomCalcFormatterParams:  {
-                    decimal: "", 
-                    thousand: ".", 
-                    symbolAfter: " Ton", 
-                    precision: false
-                },     
-            },
-            {title: 'Harga Modal', field: 'harga_modal'},
-            {
-                title: 'Jumlah Harga', 
-                field: 'jumlah_harga', 
-                formatter: "money", 
-                formatterParams: { 
-                    decimal: ",", 
-                    thousand: ".", 
-                    symbol: "Rp. ", 
-                    precision: false,
-                },
-                bottomCalc:"sum", 
-                bottomCalcParams: {
-                    precision: false
-                },
-                bottomCalcFormatter: "money",
-                bottomCalcFormatterParams:  {
-                    decimal: ",",
-                    thousand: ".",
-                    symbol: "Rp. ",
-                    precision: false
-                },         
-            },
-        ]
-    });
+    //     table.setFilter(filter, "like", $("#filter-value").val());
+    //     console.log(filter + ' | ' + $("#filter-type").val() + ' | ' + $("#filter-value").val());
+    // }
+
+    // //Update filters on value change
+    // $("#filter-field, #filter-type").change(updateFilter);
+    // $("#filter-value").change(updateFilter);
+
+    // //Clear filters on "Clear Filters" button click
+    // $("#filter-clear").click(function(){
+    //     $("#filter-field").val("");
+    //     $("#filter-type").val("=");
+    //     $("#filter-value").val("");
+
+    //     table.clearFilter();
+    // });
+    // //define table
+    // var tableHistory = new Tabulator("#riwayat", {
+    //     layout:"fitColumns",
+    //     pagination:"local",
+    //     paginationSize:4,
+    //     paginationSizeSelector:[5, 10, 20, 50, 100],
+    //     columns: [
+    //         {title: 'Status', field: 'status'},
+    //         {title: 'Tanggal', field: 'tanggal'},
+    //         {title: 'Petani', field: 'petani'},
+    //         {title: 'Komoditas', field: 'komoditas'},
+    //         {title: 'Kelas', field: 'kelas'},
+    //         {title: 'Berat', field: 'berat'},
+    //     ]
+    // });
+    // var table = new Tabulator("#kelas", {
+    //     layout:"fitColumns",
+    //     pagination:"local",
+    //     paginationSize:4,
+    //     paginationSizeSelector:[5, 10, 20, 50, 100],
+    //     // groupBy: 'kelas',
+    //     columns: [
+    //         {title: 'Kelas', field: 'kelas'},
+    //         {title: 'Tanggal Masuk', field: 'tanggal_masuk'},
+    //         {title: 'No. Resi', field: 'no_resi'},
+    //         {title: 'Petani', field: 'petani'},
+    //         {
+    //             title: 'Jumlah Berat', 
+    //             field: 'jumlah_berat',
+    //             formatter: "money", 
+    //             formatterParams: { 
+    //                 decimal: "", 
+    //                 thousand: ".", 
+    //                 symbolAfter: " Ton", 
+    //                 precision: false,
+    //             },
+    //             bottomCalc:"sum", 
+    //             bottomCalcParams: {
+    //                 precision: false
+    //             },
+    //             bottomCalcFormatter: "money",
+    //             bottomCalcFormatterParams:  {
+    //                 decimal: "", 
+    //                 thousand: ".", 
+    //                 symbolAfter: " Ton", 
+    //                 precision: false
+    //             },     
+    //         },
+    //         {title: 'Harga Modal', field: 'harga_modal'},
+    //         {
+    //             title: 'Jumlah Harga', 
+    //             field: 'jumlah_harga', 
+    //             formatter: "money", 
+    //             formatterParams: { 
+    //                 decimal: ",", 
+    //                 thousand: ".", 
+    //                 symbol: "Rp. ", 
+    //                 precision: false,
+    //             },
+    //             bottomCalc:"sum", 
+    //             bottomCalcParams: {
+    //                 precision: false
+    //             },
+    //             bottomCalcFormatter: "money",
+    //             bottomCalcFormatterParams:  {
+    //                 decimal: ",",
+    //                 thousand: ".",
+    //                 symbol: "Rp. ",
+    //                 precision: false
+    //             },         
+    //         },
+    //     ]
+    // });
 
     $(function() {
         // use below if you want to specify the path for leaflet's images
@@ -366,11 +411,4 @@
         })
     });
 </script>
-@endsection
-
-@section('css')
-<link href="https://unpkg.com/tabulator-tables@4.4.3/dist/css/tabulator.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabulator/4.4.3/css/bootstrap/tabulator_bootstrap4.min.css" integrity="sha256-+AmauyGZPl0HNTBQ5AMZBxfzP+rzXJjraezMKpWwWSE=" crossorigin="anonymous" />
-<style type="text/css">
-</style>
 @endsection

@@ -10,4 +10,9 @@ class District extends Model
 		{
 				return $this->hasMany('App\Warehouse');
 		}
+
+		public function villages()
+		{
+				return $this->hasMany('App\Village');
+		}
 }

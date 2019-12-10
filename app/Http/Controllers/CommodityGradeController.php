@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\CommodityGrade;
+use App\CommodityPriceHistory;
+use Illuminate\Support\Carbon;
 
 class CommodityGradeController extends Controller
 {
@@ -50,15 +52,17 @@ class CommodityGradeController extends Controller
             'name' => 'required',
             'price' => 'required'
         ]);
-        // 10.000,20 -> 10000,20
-        $price = str_replace('.', '', $request->price);
-        // 10000,20 -> 10000.20
-        $price = str_replace(',', '.', $price);
-        $price = (float) number_format($price, 2, '.', '');
         CommodityGrade::create([
             'commodity_id' => $request->commodity_id,
             'name' => $request->name,
-            'price' => $price
+            'price' => saveMoney($request->price)// $price
+        ]);
+        $commodityGrade = CommodityGrade::orderBy('created_at', 'desc')->first();
+        CommodityPriceHistory::create([
+            'commodity_grade_id' => $commodityGrade->id,
+            'user_id' => auth()->user()->id,
+            'date' => date('Y-m-d'),
+            'price' => $commodityGrade->price
         ]);
         return redirect('commodities/' . $commodityId);
     }
@@ -82,7 +86,7 @@ class CommodityGradeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id, $commodityId)
+    public function edit($commodityId, $id)
     {
         if (auth()->user()->hasPermission('edit_commodity_grades') === false) {
             return redirect('/home')->with('danger', 'You don\'t have permissions');
@@ -98,7 +102,7 @@ class CommodityGradeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, $commodityId)
+    public function update(Request $request, $commodityId, $id)
     {
         if (auth()->user()->hasPermission('edit_commodity_grades') === false) {
             return redirect('/home')->with('danger', 'You don\'t have permissions');
@@ -113,10 +117,22 @@ class CommodityGradeController extends Controller
         $price = str_replace(',', '.', $price);
         $price = (float) number_format($price, 2, '.', '');
         // dd($price);
-        CommodityGrade::where('id', $id)
+        CommodityGrade::find($id)
             ->update([
             'name' => $request->name,
             'price' => $price
+        ]);
+        $commodityGrade = CommodityGrade::find($id);
+        $todayPrice = CommodityPriceHistory::where('commodity_grade_id', $id)
+                                    ->whereDate('created_at', Carbon::today())->first();
+        if ($todayPrice) {
+            $todayPrice->delete();
+        }
+        CommodityPriceHistory::create([
+            'commodity_grade_id' => $commodityGrade->id,
+            'user_id' => auth()->user()->id,
+            'date' => date('Y-m-d'),
+            'price' => $commodityGrade->price
         ]);
         return redirect('commodities/'.$commodityId);
     }
@@ -127,7 +143,7 @@ class CommodityGradeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, $commodityId)
+    public function destroy($commodityId, $id)
     {
         if (auth()->user()->hasPermission('delete_commodity_grades') === false) {
             return redirect('/home')->with('danger', 'You don\'t have permissions');

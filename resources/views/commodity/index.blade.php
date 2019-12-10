@@ -33,11 +33,11 @@
                                     <td class="text-right">
                                         <a href="/commodities/{{$commodity->id}}" class="btn btn-sm btn-primary text-white"><i class="fa fa-edit text-white"></i> Detail</a>
                                         <a href="/commodities/{{$commodity->id}}/edit" class="btn btn-sm btn-info text-white"><i class="fa fa-edit text-white"></i> Ubah</a>
-                                        <form method="post" action="/commodities/{{$commodity->id}}" class="d-inline" onsubmit="return confirm('Apakah Anda yakin akan menghapus data ini?')">
+                                        {{-- <form method="post" action="/commodities/{{$commodity->id}}" class="d-inline" onsubmit="return confirm('Apakah Anda yakin akan menghapus data ini?')">
                                             @method('delete')
                                             @csrf
                                             <button type="submit" class="btn btn-sm btn-danger text-white"><i class="fa fa-trash text-white"></i> Hapus</button>
-                                        </form>
+                                        </form> --}}
                                     </td>
                                 </tr>
                                 @endforeach

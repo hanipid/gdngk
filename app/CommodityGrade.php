@@ -12,4 +12,9 @@ class CommodityGrade extends Model
     {
     		return $this->belongsTo('App\Commodity', 'commodity_id', 'id');
     }
+
+    public function commodityPriceHistories()
+    {
+    	 	return $this->hasMany('App\CommodityPriceHistory');
+    }
 }

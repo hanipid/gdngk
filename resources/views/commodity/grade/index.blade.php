@@ -18,11 +18,11 @@
                 <td class="text-right">
                     {{-- <a href="/commodities/grade/{{$grade->id}}" class="btn btn-sm btn-primary text-white"><i class="fa fa-edit text-white"></i> Detail</a> --}}
                     <a href="/commodities/{{$grade->commodity_id}}/grades/{{$grade->id}}/edit" class="btn btn-sm btn-info text-white"><i class="fa fa-edit text-white"></i> Ubah</a>
-                    <form method="post" action="/commodities/{{$grade->commodity_id}}/grades/{{$grade->id}}" onsubmit="return confirm('Apakah Anda yakin akan menghapus data ini?')" class="d-inline">
+                    {{-- <form method="post" action="/commodities/{{$grade->commodity_id}}/grades/{{$grade->id}}" onsubmit="return confirm('Apakah Anda yakin akan menghapus data ini?')" class="d-inline">
                         @csrf
                         @method('delete')
                         <button type="submit" class="btn btn-sm btn-danger text-white"><i class="fa fa-trash text-white"></i> Hapus</button>
-                    </form>
+                    </form> --}}
                 </td>
             </tr>
             @php $total += $grade->price @endphp
@@ -31,7 +31,7 @@
         <tfoot>
             <tr>
                 <th></th>
-                <th>@ribuan($total)</th>
+                <th>{{-- @ribuan($total) --}}</th>
                 <th></th>
             </tr>
         </tfoot>

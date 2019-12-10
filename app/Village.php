@@ -10,4 +10,9 @@ class Village extends Model
     {
     		return $this->hasMany('App\Warehouse');
     }
+
+    public function district()
+    {
+    	 	return $this->belongsTo('App\District');
+    }
 }

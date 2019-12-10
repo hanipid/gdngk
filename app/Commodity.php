@@ -17,4 +17,9 @@ class Commodity extends Model
     {
     		return $this->hasMany('App\CommodityGrade');
     }
+
+    public function warehouseRentalHistories()
+    {
+    	return $this->hasMany('App\WarehouseRentalHistory');
+    }
 }

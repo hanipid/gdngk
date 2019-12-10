@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Commodity;
+use App\WarehouseRentalHistory;
+use Illuminate\Support\Carbon;
 
 class CommodityController extends Controller
 {
@@ -50,6 +52,12 @@ class CommodityController extends Controller
             return redirect('/home')->with('danger', 'You don\'t have permissions');
         }
         Commodity::create($request->all());
+
+        $latestCommodity = Commodity::orderBy('created_at', 'desc')->first();
+        WarehouseRentalHistory::create([
+            'commodity_id' => $latestCommodity->id,
+            'rental_price' => $latestCommodity->rental_price
+        ]);
         return redirect('commodities');
     }
 
@@ -104,6 +112,17 @@ class CommodityController extends Controller
         }
 
         Commodity::where('id', $id)->update($request->except(['_method', '_token']));
+
+        $commodity = Commodity::find($id);
+        $todayPrice = WarehouseRentalHistory::where('commodity_id', $id)
+                                    ->whereDate('created_at', Carbon::today())->first();
+        if ($todayPrice) {
+            $todayPrice->delete();
+        }
+        WarehouseRentalHistory::create([
+            'commodity_id' => $commodity->id,
+            'rental_price' => $commodity->rental_price
+        ]);
         return redirect('commodities');
     }
 

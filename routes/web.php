@@ -61,6 +61,7 @@ Route::get('/warehouses/{id}/edit', 'WarehouseController@edit')->middleware('aut
 Route::put('/warehouses/{id}', 'WarehouseController@update')->middleware('auth');
 Route::get('/warehouses/{id}', 'WarehouseController@show')->middleware('auth');
 Route::delete('/warehouses/{id}', 'WarehouseController@destroy')->middleware('auth');
+Route::get('/print/{id}', 'WarehouseController@print')->middleware('auth');
 
 Route::get('/stocks', 'StockController@index')->middleware('auth');
 Route::get('/stocks/create', 'StockController@create')->middleware('auth');
@@ -70,3 +71,7 @@ Route::put('/stocks/{id}', 'StockController@update')->middleware('auth');
 Route::get('/stocks/{warehouseId}/{farmerId}', 'StockController@show')->middleware('auth');
 Route::delete('/stocks/{id}', 'StockController@destroy')->middleware('auth');
 Route::delete('/stocks/deletegrade/{id}', 'StockController@destroyGrade')->middleware('auth');
+
+Route::get('/receipts', 'WarehouseReceiptController@index')->middleware('auth');
+Route::get('/receipts/{farmer_id}/create', 'WarehouseReceiptController@create')->middleware('auth');
+Route::post('/receipts', 'WarehouseReceiptController@store')->middleware('auth');

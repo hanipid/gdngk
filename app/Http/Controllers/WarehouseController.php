@@ -11,6 +11,7 @@ use App\WarehouseCategory;
 use App\District;
 use App\Village;
 use App\GoodsHistory;
+use App\WarehouseReceipt;
 
 class WarehouseController extends Controller
 {
@@ -96,9 +97,14 @@ class WarehouseController extends Controller
             return redirect('/home')->with('danger', 'You don\'t have permissions');
         }
         $warehouse = Warehouse::find($id);
+        $warehouseReceipts = WarehouseReceipt::where('warehouse_id', $warehouse->id)
+                                ->orderBy('created_at', 'desc')
+                                ->get();
+
         $goodsHistories = GoodsHistory::where('warehouse_id', $warehouse->id)
+										->orderBy('created_at', 'desc')
                                         ->get();
-        return view('warehouse.show', compact('warehouse', 'goodsHistories'));
+        return view('warehouse.show', compact('warehouse', 'goodsHistories', 'warehouseReceipts'));
     }
 
     /**
@@ -201,5 +207,11 @@ class WarehouseController extends Controller
         }
         $warehouse->delete();
         return redirect('/warehouses');
+    }
+
+    public function print($id)
+    {
+        $warehouseReceipt = WarehouseReceipt::find($id);
+        return view('warehouse.print', compact('warehouseReceipt'));
     }
 }
