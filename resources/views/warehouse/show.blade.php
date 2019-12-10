@@ -65,7 +65,7 @@
                                     </div>
                                 </div> {{-- /.row --}}
 
-                                @if ($warehouseReceipts)
+                                @if (count($warehouseReceipts) > 0)
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="my-2 row">

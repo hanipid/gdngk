@@ -100,7 +100,6 @@ class WarehouseController extends Controller
         $warehouseReceipts = WarehouseReceipt::where('warehouse_id', $warehouse->id)
                                 ->orderBy('created_at', 'desc')
                                 ->get();
-
         $goodsHistories = GoodsHistory::where('warehouse_id', $warehouse->id)
 										->orderBy('created_at', 'desc')
                                         ->get();
