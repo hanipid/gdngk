@@ -10,6 +10,6 @@ class CommodityGrade extends Model
 
     public function commodity()
     {
-    		$this->belongsTo('App\Commodity');
+    		return $this->belongsTo('App\Commodity', 'commodity_id', 'id');
     }
 }

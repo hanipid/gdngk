@@ -7,6 +7,7 @@ use App\IncomingGoods;
 use App\User;
 use App\CommodityGrade;
 use App\Warehouse;
+use App\GoodsHistory;
 
 class StockController extends Controller
 {
@@ -65,8 +66,18 @@ class StockController extends Controller
                     'employee_id' => $employee->id,
                     'farmer_id' => $request->farmer_id,
                     'warehouse_id' => $warehouse->id,
-                    'commodity_grades_id' => $request->commodityGradeId[$i],
+                    'commodity_grade_id' => $request->commodityGradeId[$i],
                     'weight' => $request->weight[$i]
+                ]);
+                $incomingGoods = IncomingGoods::orderby('created_at', 'desc')->first();
+                GoodsHistory::create([
+                    'incoming_goods_id' => $incomingGoods->id,
+                    'employee_id' => $employee->id,
+                    'farmer_id' => $request->farmer_id,
+                    'warehouse_id' => $warehouse->id,
+                    'commodity_grade_id' => $request->commodityGradeId[$i],
+                    'weight' => $request->weight[$i],
+                    'status' => 'masuk'
                 ]);
             }                
         }
@@ -88,8 +99,11 @@ class StockController extends Controller
         $incomingGoods = IncomingGoods::where('warehouse_id', $warehouseId)
                             ->where('farmer_id', $farmerId)
                             ->get();
+        $goodsHistories = GoodsHistory::where('warehouse_id', $warehouseId)
+                            ->where('farmer_id', $farmerId)
+                            ->get();
         $farmer = User::find($farmerId);
-        return view('stock.show', compact('incomingGoods', 'farmer'));
+        return view('stock.show', compact('incomingGoods', 'farmer', 'goodsHistories'));
     }
 
     /**
@@ -125,6 +139,11 @@ class StockController extends Controller
 
         $incomingGoods = IncomingGoods::find($id);
         $incomingGoods->update([
+            'weight' => $request->weight
+        ]);
+        $goodsHistory = GoodsHistory::where('incoming_goods_id', $incomingGoods->id)
+                                    ->where('status', 'masuk')->first();
+        $goodsHistory->update([
             'weight' => $request->weight
         ]);
         return redirect('/stocks/' . $incomingGoods->warehouse_id . '/' . $incomingGoods->farmer_id);

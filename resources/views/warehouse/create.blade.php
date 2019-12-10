@@ -15,7 +15,7 @@
                         <div class="col-md-8">
                             <select class="form-control" name="user_id" id="user_id">
                                 @foreach ($users as $user)
-                                <option value="{{$user->id}}" @if(old('user_id') == $user->id) selected @endif>{{$user->name}}</option>
+                                <option value="{{$user->id}}" @if(old('user_id') == $user->id) selected @endif>{{$user->name}} {{$user->company}}</option>
                                 @endforeach
                             </select>
                         </div>

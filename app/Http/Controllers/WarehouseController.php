@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use App\WarehouseCategory;
 use App\District;
 use App\Village;
+use App\GoodsHistory;
 
 class WarehouseController extends Controller
 {
@@ -95,7 +96,9 @@ class WarehouseController extends Controller
             return redirect('/home')->with('danger', 'You don\'t have permissions');
         }
         $warehouse = Warehouse::find($id);
-        return view('warehouse.show', compact('warehouse'));
+        $goodsHistories = GoodsHistory::where('warehouse_id', $warehouse->id)
+                                        ->get();
+        return view('warehouse.show', compact('warehouse', 'goodsHistories'));
     }
 
     /**

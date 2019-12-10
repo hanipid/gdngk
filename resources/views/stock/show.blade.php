@@ -12,9 +12,6 @@
             <div class="card">
                 <div class="card-body">
                     
-
-
-
                     <div class="card card-success card-outline card-outline-tabs">
                         <div class="card-header p-0 border-bottom-0">
                             <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
@@ -47,7 +44,7 @@
                                             <tr>
                                                 <td>{{ $goods->farmer->name }}</td>
                                                 <td>{{ $goods->commodityGrade->name }}</td>
-                                                <td>{{ $goods->weight }}</td>
+                                                <td>@ribuan($goods->weight) Kg</td>
                                                 <td class="text-right">
                                                     {{-- <a href="/stocks/{{$goods->id}}" class="btn btn-sm btn-primary text-white"><i class="fa fa-edit text-white"></i> Detail</a> --}}
                                                     <a href="/stocks/{{$goods->id}}/edit" class="btn btn-sm btn-info text-white"><i class="fa fa-edit text-white"></i> Ubah</a>
@@ -114,7 +111,31 @@
                                     </div> {{-- /.row --}}
                                 </div>
                                 <div class="tab-pane fade" id="custom-tabs-three-history" role="tabpanel" aria-labelledby="custom-tabs-three-history-tab">
-                                    
+                                    <table class="table table-hover table-sm" id="datatables2">
+                                        <thead>
+                                            <tr>
+                                                <th>Status</th>
+                                                <th>Tanggal</th>
+                                                <th>Petani</th>
+                                                <th>Komoditas</th>
+                                                <th>Kelas</th>
+                                                <th>Berat</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            @foreach ($goodsHistories as $goodsHistory)
+                                            <tr>
+                                                <td class="@if($goodsHistory->status == 'masuk') text-success @else text-danger @endif ">{{ $goodsHistory->status }}</td>
+                                                <td>{{ date('d M Y', strtotime($goodsHistory->created_at)) }}</td>
+                                                <td>{{ $goodsHistory->farmer->name }}</td>
+                                                <td>{{ $goodsHistory->commodityGrade->commodity->name }}</td>
+                                                <td>{{ $goodsHistory->commodityGrade->name }}</td>
+                                                <td>@ribuan($goodsHistory->weight) Kg</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -134,7 +155,7 @@
 <script src="https://adminlte.io/themes/dev/AdminLTE/plugins/datatables/jquery.dataTables.js"></script>
 <script src="https://adminlte.io/themes/dev/AdminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
 <script>
-    $('#datatables').DataTable({
+    $('#datatables, #datatables2').DataTable({
         "order": [[ 1, "asc" ]]
     });
 </script>

@@ -196,7 +196,31 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="custom-tabs-three-history" role="tabpanel" aria-labelledby="custom-tabs-three-history-tab">
-                                
+                                <table class="table table-hover table-sm" id="datatables2">
+                                    <thead>
+                                        <tr>
+                                            <th>Status</th>
+                                            <th>Tanggal</th>
+                                            <th>Petani</th>
+                                            <th>Komoditas</th>
+                                            <th>Kelas</th>
+                                            <th>Berat</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @foreach ($goodsHistories as $goodsHistory)
+                                        <tr>
+                                            <td class="@if($goodsHistory->status == 'masuk') text-success @else text-danger @endif ">{{ $goodsHistory->status }}</td>
+                                            <td>{{ date('d M Y', strtotime($goodsHistory->created_at)) }}</td>
+                                            <td>{{ $goodsHistory->farmer->name }}</td>
+                                            <td>{{ $goodsHistory->commodityGrade->commodity->name }}</td>
+                                            <td>{{ $goodsHistory->commodityGrade->name }}</td>
+                                            <td>@ribuan($goodsHistory->weight) Kg</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                             <div class="tab-pane fade" id="custom-tabs-three-acounting" role="tabpanel" aria-labelledby="custom-tabs-three-acounting-tab">
                                 

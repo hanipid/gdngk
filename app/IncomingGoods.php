@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class IncomingGoods extends Model
 {
-	protected $fillable = ['employee_id', 'farmer_id', 'warehouse_id', 'commodity_grades_id', 'weight'];
+	protected $fillable = ['employee_id', 'farmer_id', 'warehouse_id', 'commodity_grade_id', 'weight'];
     // protected $table = 'incoming_goods';
 	public function commodityGrade()
 	{
-		return $this->belongsTo('\App\CommodityGrade', 'commodity_grades_id', 'id');
+		return $this->belongsTo('\App\CommodityGrade', 'commodity_grade_id', 'id');
 	}
 
 	public function employee()
