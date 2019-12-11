@@ -20,6 +20,7 @@
                                 <th>Komoditas</th>
                                 <th>Pemilik</th>
                                 <th>Perusahaan</th>
+                                <th>Kategori</th>
                                 <th>Kecamatan</th>
                                 <th>Kapasitas</th>
                                 <th></th>
@@ -32,15 +33,16 @@
                                 <td>{{ $warehouse->commodity->name }}</td>
                                 <td>{{ $warehouse->user->name }}</td>
                                 <td>{{ $warehouse->user->company }}</td>
+                                <td>{{ $warehouse->warehouseCategory->name }}</td>
                                 <td>{{ ucwords(strtolower($warehouse->district->name)) }}</td>
                                 <td>{{ $warehouse->capacity / 1000 }} Ton</td>
                                 <td class="text-right">
-                                    <a href="/warehouses/{{$warehouse->id}}" class="btn btn-sm btn-primary text-white"><i class="fa fa-edit text-white"></i> Detail</a>
-                                    <a href="/warehouses/{{$warehouse->id}}/edit" class="btn btn-sm btn-info text-white"><i class="fa fa-edit text-white"></i> Ubah</a>
+                                    <a href="/warehouses/{{$warehouse->id}}" class="btn btn-sm btn-primary text-white"><i class="fa fa-eye text-white"></i> {{-- Detail --}}</a>
+                                    <a href="/warehouses/{{$warehouse->id}}/edit" class="btn btn-sm btn-info text-white"><i class="fa fa-edit text-white"></i> {{-- Ubah --}}</a>
                                     <form method="post" action="/warehouses/{{$warehouse->id}}" class="d-inline" onsubmit="return confirm('Apakahanda yakin ingin menghapus data ini?')">
                                         @method('delete')
                                         @csrf
-                                        <button type="submit" class="btn btn-sm btn-danger text-white"><i class="fa fa-trash text-white"></i> Hapus</button>
+                                        <button type="submit" class="btn btn-sm btn-danger text-white"><i class="fa fa-trash text-white"></i> {{-- Hapus --}}</button>
                                     </form>
                                 </td>
                             </tr>
