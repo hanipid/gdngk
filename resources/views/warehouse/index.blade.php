@@ -19,6 +19,8 @@
                             <tr>
                                 <th>Komoditas</th>
                                 <th>Pemilik</th>
+                                <th>Perusahaan</th>
+                                <th>Kecamatan</th>
                                 <th>Kapasitas</th>
                                 <th></th>
                             </tr>
@@ -29,6 +31,8 @@
                             <tr>
                                 <td>{{ $warehouse->commodity->name }}</td>
                                 <td>{{ $warehouse->user->name }}</td>
+                                <td>{{ $warehouse->user->company }}</td>
+                                <td>{{ ucwords(strtolower($warehouse->district->name)) }}</td>
                                 <td>{{ $warehouse->capacity / 1000 }} Ton</td>
                                 <td class="text-right">
                                     <a href="/warehouses/{{$warehouse->id}}" class="btn btn-sm btn-primary text-white"><i class="fa fa-edit text-white"></i> Detail</a>
