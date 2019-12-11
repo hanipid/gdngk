@@ -12,7 +12,18 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $warehouses = \App\Warehouse::all();
+    $array = [];
+    foreach ($warehouses as $warehouse) {
+    	$array[] = [
+    		'company' => $warehouse->user->company,
+    		'lat' => $warehouse->latitude,
+    		'lng' => $warehouse->longitude
+    	];
+    }
+    $arr = json_encode($array);
+    // dd($arr);
+    return view('welcome', compact('arr'));
 });
 
 

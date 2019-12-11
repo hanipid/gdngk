@@ -5,6 +5,9 @@
         .content-wrapper {
             margin-left: 0 !important;
         }
+        .main-footer {
+            margin-left: 0 !important;
+        }
     </style>
     @stack('css')
     @yield('css')
@@ -50,7 +53,7 @@
         </nav>
 
         <div class="content-wrapper">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="content-header">
                     <div class="{{config('adminlte.classes_content_header', 'container-fluid')}}">
                         @yield('content_header')
@@ -64,6 +67,13 @@
                 </div>
             </div>
         </div>
+
+        @hasSection('footer')
+        <footer class="main-footer">
+
+            @yield('footer')
+        </footer>
+        @endif
     </div>
 @stop
 
